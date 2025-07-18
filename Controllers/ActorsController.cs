@@ -43,8 +43,48 @@ namespace ecommerce_mvc.Controllers
         {
             var actorDetails = await _service.GetByIdAsync(id);
 
-            if (actorDetails == null) return View("Empty");
+            if (actorDetails == null) return View("NotFound");
             return View(actorDetails);
+        }
+
+        // Get: Actors/Edit
+        public async Task<IActionResult> Edit(int id)
+        {
+            var actorDetails = await _service.GetByIdAsync(id);
+
+            if (actorDetails == null) return View("NotFound");
+            return View(actorDetails);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FullName,ProfilePictueURL,Bio")] Actor actor)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(actor);
+            }
+            await _service.UpdateAsync(id, actor);
+            return RedirectToAction(nameof(Index));
+        }
+
+        // Get: Actors/Delete
+        public async Task<IActionResult> Delete(int id)
+        {
+            var actorDetails = await _service.GetByIdAsync(id);
+
+            if (actorDetails == null) return View("NotFound"); // deleting an actor which doesnt exist in the database will return NotFound View
+            return View(actorDetails);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var actorDetails = await _service.GetByIdAsync(id);
+
+            if (actorDetails == null) return View("NotFound");
+
+            await _service.DeleteAsync(id);  // can also pass actorDetails parameter since we already have the actorDetails, change parameter for DeleteAsync
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -7,7 +7,7 @@ namespace ecommerce_mvc.Data.Services
         Task<IEnumerable<Actor>> GetAllAsync(); // Get all actors
         Task <Actor> GetByIdAsync(int id); // Get single actor by id
         Task AddAsync(Actor actor);
-        Actor Update(int id, Actor newActor); // Update data in db
-        void Delete(int id);
+        Task<Actor> UpdateAsync(int id, Actor newActor); // Update data in db
+        Task DeleteAsync(int id);
     }
 }
